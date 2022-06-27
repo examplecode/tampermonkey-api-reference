@@ -1,6 +1,6 @@
 # 油猴脚本API中文参考
 
-
+[English](README-en.md) | [中文](README.md)
 
 本文整理了大部分Tampermonkey 油猴脚本API的使用方法，并且附上了每个方法的代码示例。除此之外您可以安装[油猴脚本API示例脚本](https://github.com/examplecode/user-script-example)在支持用户脚本的浏览器中进行测试。
 

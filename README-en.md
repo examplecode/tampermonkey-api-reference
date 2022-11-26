@@ -277,6 +277,74 @@ for (let key of keys) {
 }
 ```
 
+### GM_addValueChangeListener
+
+#### Description
+
+Used to listen to key value change  of key-value pair set by GM_setValue
+
+#### Syntax
+
+```javascript
+function GM_addValueChangeListener(name,callback);
+
+```
+
+#### Parameters   
+
+| Name     | Type              | Description                                                  |
+| -------- | ----------------- | ------------------------------------------------------------ |
+| name     | String            | String key name                                              |
+| callback | Callback function | Call back this function when the specified key name value changes |
+
+##### callback parameters
+
+- **name** - String，Key name
+- **oldValue** - Any type ，OldValue
+- **newValue** - Any type , New value
+- **remote** - Boolean type，The callback from the current tab or the callback from the other tab (cross tab callback is not implemented at present).
+
+
+
+#### Return value
+
+Callback id returned by GM_addValueChangeListener
+
+#### Example
+
+``` javascript
+   listener_id = GM_addValueChangeListener("foo",function(name,old_value,new_value,remote) {
+        alert("Value Changed:" + name + ":" + old_value + "=>" + new_value);
+    });
+```
+
+
+### GM_removeValueChangeListener
+
+#### Description
+
+Used to delete  listener callback added by GM_addValueChangeListener
+
+#### Syntax
+
+```javascript
+function GM_removeValueChangeListener(listener_id);
+
+```
+
+#### Parameters   
+
+| Name | Type | Description              |
+| -------- | -------- | ---------------------------- |
+| listener_id | String | Callback id returned by GM_addValueChangeListener |
+
+
+
+#### Example
+
+``` javascript
+ GM_removeValueChangeListener(listener_id);
+```
 
 ### GM_notification
 #### Description
@@ -581,7 +649,7 @@ This method has only one parameter of object type ，The list of properties of t
   - **response** - The  response object returned by the HTTP response，object type data, depending on the setting of the **responseType** field.
   - **responseText** - The text content returned by the HTTP response
 
-#### 示例
+#### Example
 
 
 

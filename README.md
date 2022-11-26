@@ -270,10 +270,84 @@ for (let key of keys) {
 ```
 
 
+
+### GM_addValueChangeListener
+
+#### 描述
+
+用来监听通过GM_setValue设置的键值对的改变
+
+#### 语法
+
+```javascript
+function GM_addValueChangeListener(name,callback);
+
+```
+
+#### 参数   
+
+| 名称     | 类型     | 描述                         |
+| -------- | -------- | ---------------------------- |
+| name     | 字符串   | 字符串键值                   |
+| callback | 回调函数 | 当指定的键值改变时回调此函数 |
+
+##### callback 参数列表
+
+- **name** - 字符串类型，键值名称
+- **oldValue** - 任意类型 ，以前的键值
+- **newValue** - 任意类型 ，新的键值。
+- **remote** - 布尔类型，来自当前标签的回调还是垮标签的回调（目前没有实现跨标签回调）
+
+
+
+#### 返回值
+
+返回监听的回调函数的id,用于以后通过GM_removeValueChangeListener 方法删除回调函数。
+
+#### 示例
+
+``` javascript
+   listener_id = GM_addValueChangeListener("foo",function(name,old_value,new_value,remote) {
+        alert("Value Changed:" + name + ":" + old_value + "=>" + new_value);
+    });
+```
+
+
+### GM_removeValueChangeListener
+
+#### 描述
+
+用来删除通过GM_addValueChangeListener添加的监听回调
+
+#### 语法
+
+```javascript
+function GM_removeValueChangeListener(listener_id);
+
+```
+
+#### 参数   
+
+| 名称     | 类型     | 描述                         |
+| -------- | -------- | ---------------------------- |
+| listener_id | 回调函数Id | GM_removeValueChangeListener返回的回调函数id |
+
+
+
+#### 示例
+
+``` javascript
+ GM_removeValueChangeListener(listener_id);
+```
+
+
 ### GM_notification
+
 #### 描述
 显示一条通知消息
+
 #### 语法
+
 ```javascript
 function GM_notification(details)
 ```

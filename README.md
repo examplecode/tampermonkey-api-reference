@@ -510,8 +510,10 @@ function GM_download(detail)
 
 - **url**  - 字符串类型，表示要下载的网址
 - **name** - 字符串类型，下载文件保存的名称
-- **confirm** - 布尔类型 ，是否弹出下载对话框，批量下载的时候设置此选项为false
-- **tag** - 字符串 ,下载文件打上标签，X浏览器的实现是相同的标签的资源保存在以标签命名的目录。
+- **hedaers** - 对象类型，HTTP请求头
+- **onload** - 回调函数，下载完成.
+- **onerror** - 回调函数，下载出错
+- **tag** - 字符串 ,下载文件打上标签，X浏览器的实现是相同tag的资源保存在以标签命名的目录。
 
 #### 示例
 
@@ -521,22 +523,26 @@ GM_download("https://www.xbext.com/download/xbrowser-release.apk")
 
 ```javascript
 //指定下载保存文件名称
-GM_download("https://www.xbext.com/download/xbrowser-release.apk,"xbrowser.apk");
+GM_download("https://www.xbext.com/download/xbrowser-release.apk,"xbrowser.apk")
 ```
 
 ```javascript
-//批量下载，保存在默认下载目录，名字为tag的子目录
 let urls = ["https://www.dundeecity.gov.uk/sites/default/files/publications/civic_renewal_forms.zip",
-            "https://www.dundeecity.gov.uk/sites/default/files/publications/civic_renewal_forms.zip",
-            "https://www.dundeecity.gov.uk/sites/default/files/publications/civic_renewal_forms.zip",
-           ];
-var i =0;
-for(let url of urls ) {
+  "https://www.dundeecity.gov.uk/sites/default/files/publications/civic_renewal_forms.zip",
+  "https://www.dundeecity.gov.uk/sites/default/files/publications/civic_renewal_forms.zip",
+];
+var i = 0;
+for (let url of urls) {
   GM_download({
     url: `${url}`,
     name: `test-file${++i}.zip`,
-    confirm: false,
-    tag: "test-file"
+    headers:{
+        Referer:"https://www.example.com/"
+    },
+    onload: function() {
+      console.log("download completed !");
+    },
+    tag: "test-file" /* 此属性为 x的扩展，在下载目录中创建名字为tag的子目录中统一保存 */
   });
 }
 ```
@@ -681,7 +687,121 @@ GM.xmlHttpRequest({
 });
 ```
 
+### urlchange 
 
+这是扩展的一个事件函数，常用于单页面应用监听浏览器url变化。
+
+
+
+#### 示例
+
+```javascript
+    window.addEventListener('urlchange', () => {
+       alert("urlchange");
+    });
+   //当页面跳转到一个新的锚点会触发urlchange事件
+   window.location = "#test"
+```
+
+### GM_cookie
+
+#### 描述
+
+该方法可以突破浏览器对Cookie的跨域限制，对某个网站下的Cookie进行操作，包括获取、设置、删除Cookie。此方法存在安全隐患，可能会导致用户隐私信息泄露。目前主要为了兼容一些脚本，暂时支持这个方法，后续可能会限制这个方法的使用。
+
+
+#### 语法
+
+```javascript
+function GM_cookie(action,details,callback)
+```
+
+#### 参数
+
+| 名称    | 类型 | 描述                       |
+| ------- | ---- | -------------------------- |
+| action |  字符串 | 对Cookie的操作方式 [list,set,delete] |
+| details | 对象 | 包含一系列属性作为参数 |
+| callback |  回调函数 | 返回对Cookie操作的结果 |
+
+#####  action 可选项
+
+- **list** - 获取某个域名下的Cookies 列表
+- **set** - 设置某个域名下的Cookie
+- **delete** - 删除某个域名下的Cookie
+
+
+#####  details 属性说明
+
+- **url** - 页面网址
+- **domain** - Cookie域名。
+- **name** - 字符串，Cookie键值
+- **value** -字符串，Cookie内容。
+
+#### 示例
+
+获取某个域名下的Cookies 列表
+
+```javascript
+    GM_cookie('list', {
+      url: "https://www.example.com",
+    }, function (result) {
+        console.log(result);
+    });
+```
+
+删除某个域名下的Cookie
+
+```javascript
+      GM_cookie('delete', {
+        url: "https://www.example.com",
+        name: "test"
+  
+      }, function (result) {
+          console.log(result);
+      });
+```
+
+设置某个域名下的Cookie
+```javascript
+    GM_cookie('set', {
+      url: "https://www.example.com",
+      name: "test",
+      value: "test",
+    }, function (result) {
+        console.log(result);
+    });
+```
+
+> 为了兼容一些其它脚本GM_cookie函数同时也支持下面的调用方式
+
+``` javascript
+    //获取某个域名下的cookies
+    GM_cookie.list({
+      url: "https://www.example.com",
+    }, function (result) {
+        console.log(result);
+    });
+
+    //设置某个域名下的Cookie
+      GM_cookie.set({
+      url: "https://www.example.com",
+      name: "test",
+      value: "test",
+    }, function (result) {
+        console.log(result);
+    });
+
+    //删除某个域名下的Cookie
+    GM_cookie.delete({
+        url: "https://www.example.com",
+        name: "test"
+  
+      }, function (result) {
+          console.log(result);
+      });
+
+```
 
 
 
@@ -717,6 +837,8 @@ var info = "Script Name: "  + GM_info.script.name +
 
 alert(info);
 ```
+
+
 
 
 

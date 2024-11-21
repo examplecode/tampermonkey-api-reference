@@ -684,7 +684,122 @@ GM.xmlHttpRequest({
 ```
 
 
+### urlchange 
 
+This is an extended event function, commonly used in single page applications to listen for browser url changes.
+
+
+
+#### example
+
+```javascript
+    window.addEventListener('urlchange', () => {
+       alert("urlchange");
+    });
+   //The urlchange event is triggered when the page jumps to a new anchor.
+   window.location = "#test"
+```
+
+### GM_cookie
+
+#### Description
+
+This method can break through the browser's cross-domain restrictions on cookies, and operate on the cookies under a certain website, including getting, setting and deleting cookies.This method has security risks, which may lead to the leakage of users' private information. At present, this method is temporarily supported mainly for compatibility with some scripts, and the use of this method may be restricted in the future.
+
+
+#### Syntax
+
+```javascript
+function GM_cookie(action,details,callback)
+```
+
+#### Parameters
+
+| Name    | Type | Description                       |
+| ------- | ---- | -------------------------- |
+| action |  String | Action to be performed [list,set,delete] |
+| details | Object | Contains a series of attributes as parameters
+ |
+| callback |  callback | Returns the result of a cookie  |
+
+#####  action 可选项
+
+- **list** - 获取某个域名下的Cookies 列表
+- **set** - 设置某个域名下的Cookie
+- **delete** - 删除某个域名下的Cookie
+
+
+##### action optional
+
+- **list** - get a list of cookies for a domain name
+- **set** - set cookies for a domain name
+- **delete** - deletes cookies from a domain name
+
+#### Example
+
+Get a list of cookies for a domain
+
+```javascript
+    GM_cookie('list', {
+      url: "https://www.example.com",
+    }, function (result) {
+        console.log(result);
+    });
+```
+
+Delete cookies under a domain
+
+```javascript
+      GM_cookie('delete', {
+        url: "https://www.example.com",
+        name: "test"
+  
+      }, function (result) {
+          console.log(result);
+      });
+```
+
+Setting cookies under a domain
+
+```javascript
+    GM_cookie('set', {
+      url: "https://www.example.com",
+      name: "test",
+      value: "test",
+    }, function (result) {
+        console.log(result);
+    });
+```
+
+> For compatibility with some other scripts GM_cookie function also supports the following calls
+
+``` javascript
+    //Get the cookies under a domain name
+    GM_cookie.list({
+      url: "https://www.example.com",
+    }, function (result) {
+        console.log(result);
+    });
+
+    //Set a cookie for a domain
+      GM_cookie.set({
+      url: "https://www.example.com",
+      name: "test",
+      value: "test",
+    }, function (result) {
+        console.log(result);
+    });
+
+    // Delete a cookie from a domain
+    GM_cookie.delete({
+        url: "https://www.example.com",
+        name: "test"
+  
+      }, function (result) {
+          console.log(result);
+      });
+
+```
 
 
 ###  GM_info
